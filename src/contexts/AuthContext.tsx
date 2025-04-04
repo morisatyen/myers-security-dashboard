@@ -1,128 +1,140 @@
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { Role, User, initialUsers } from '../data/initialData';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
-  isAuthenticated: boolean;
-  hasPermission: (permission: PermissionType) => boolean;
+// Add bio, phone and location to the user type
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  bio?: string;
+  phone?: string;
+  location?: string;
 }
 
-type PermissionType = 
-  | 'users.create' 
-  | 'users.read' 
-  | 'users.update' 
-  | 'users.delete'
-  | 'roles.create'
-  | 'roles.read'
-  | 'roles.update'
-  | 'roles.delete'
-  | 'dispensaries.create'
-  | 'dispensaries.read'
-  | 'dispensaries.update'
-  | 'dispensaries.delete'
-  | 'serviceRequests.create'
-  | 'serviceRequests.read'
-  | 'serviceRequests.update'
-  | 'serviceRequests.delete'
-  | 'invoices.create'
-  | 'invoices.read'
-  | 'invoices.update'
-  | 'invoices.delete';
+interface AuthContextType {
+  isAuthenticated: boolean;
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  updateUserProfile?: (updatedUser: User) => void;
+  hasPermission: (permission: string) => boolean; // Add hasPermission function
+}
 
-// Role-based permissions map
-const rolePermissions: Record<Role, PermissionType[]> = {
-  admin: [
-    'users.create', 'users.read', 'users.update', 'users.delete',
-    'roles.create', 'roles.read', 'roles.update', 'roles.delete',
-    'dispensaries.create', 'dispensaries.read', 'dispensaries.update', 'dispensaries.delete',
-    'serviceRequests.create', 'serviceRequests.read', 'serviceRequests.update', 'serviceRequests.delete',
-    'invoices.create', 'invoices.read', 'invoices.update', 'invoices.delete'
-  ],
-  manager: [
-    'users.create', 'users.read', 'users.update', 
-    'roles.read',
-    'dispensaries.create', 'dispensaries.read', 'dispensaries.update',
-    'serviceRequests.create', 'serviceRequests.read', 'serviceRequests.update',
-    'invoices.create', 'invoices.read', 'invoices.update'
-  ],
-  user: [
-    'users.read',
-    'roles.read',
-    'dispensaries.read',
-    'serviceRequests.read',
-    'invoices.read'
-  ]
-};
+const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  user: null,
+  loading: true,
+  login: async () => {},
+  logout: () => {},
+  hasPermission: () => false, // Add default implementation
+});
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in (from localStorage)
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const checkAuth = async () => {
+      try {
+        // In a real application, this would verify the token with your API
+        const storedUser = localStorage.getItem('user');
+        
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // In a real app, this would make an API call to validate credentials
-    // For this demo, we'll just check against our static users
-    // Note: In a real app, passwords would be hashed and not stored in plain text
-    
-    // For demo purposes, any password works with existing emails
-    const usersFromStorage = localStorage.getItem('users');
-    const users = usersFromStorage ? JSON.parse(usersFromStorage) : initialUsers;
-    
-    const foundUser = users.find((u: User) => u.email === email && u.status === 'active');
-    
-    if (foundUser && password.length > 0) {
-      setUser(foundUser);
-      localStorage.setItem('currentUser', JSON.stringify(foundUser));
-      return true;
+  const login = async (email: string, password: string) => {
+    try {
+      // In a real application, this would call your API
+      // For the sake of this demo, we'll just simulate a successful login
+      
+      // Check if email and password are provided
+      if (!email || !password) {
+        throw new Error('Email and password are required');
+      }
+      
+      // Demo user credentials check
+      if (email !== 'admin@myerssecurity.com' || password !== 'password') {
+        throw new Error('Invalid email or password');
+      }
+      
+      const mockUser: User = {
+        id: '1',
+        name: 'Admin User',
+        email: 'admin@myerssecurity.com',
+        role: 'Administrator',
+        bio: 'Security specialist with over 5 years of experience in the cannabis industry.',
+        phone: '+1 (555) 123-4567',
+        location: 'Denver, CO'
+      };
+      
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      setUser(mockUser);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
-    
-    return false;
   };
 
   const logout = () => {
+    localStorage.removeItem('user');
     setUser(null);
-    localStorage.removeItem('currentUser');
+    setIsAuthenticated(false);
   };
 
-  const hasPermission = (permission: PermissionType): boolean => {
+  // Add function to update user profile
+  const updateUserProfile = (updatedUser: User) => {
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
+  // Implement hasPermission function
+  const hasPermission = (permission: string): boolean => {
+    // For demo purposes, let's implement a simple permission system
+    // In a real application, this would check against user's roles and permissions
     if (!user) return false;
-    return rolePermissions[user.role].includes(permission);
+    
+    // Admin has all permissions
+    if (user.role === 'Administrator') return true;
+    
+    // Define common permissions based on role
+    const rolePermissions: Record<string, string[]> = {
+      'Administrator': ['users.read', 'users.write', 'dispensaries.read', 'dispensaries.write', 'serviceRequests.read', 'serviceRequests.write', 'roles.read', 'roles.write'],
+      'Support Engineer': ['dispensaries.read', 'serviceRequests.read', 'serviceRequests.write'],
+      'Manager': ['users.read', 'dispensaries.read', 'serviceRequests.read'],
+    };
+    
+    // Check if the user's role has the required permission
+    return rolePermissions[user.role]?.includes(permission) || false;
   };
 
   return (
-    <AuthContext.Provider 
-      value={{ 
-        user, 
-        loading, 
-        login, 
-        logout, 
-        isAuthenticated: !!user,
-        hasPermission 
-      }}
-    >
+    <AuthContext.Provider value={{ 
+      isAuthenticated, 
+      user, 
+      loading, 
+      login, 
+      logout,
+      updateUserProfile,
+      hasPermission
+    }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

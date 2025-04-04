@@ -21,10 +21,14 @@ import DispensaryAdd from "./pages/DispensaryAdd";
 import DispensaryEdit from "./pages/DispensaryEdit";
 import DispensaryView from "./pages/DispensaryView";
 import ServiceRequests from "./pages/ServiceRequests";
-import Invoices from "./pages/Invoices";
+import ServiceRequestEdit from "./pages/ServiceRequestEdit";
 import KnowledgeBase from "./pages/KnowledgeBase";
 import KnowledgeBaseAdd from "./pages/KnowledgeBaseAdd";
 import KnowledgeBaseEdit from "./pages/KnowledgeBaseEdit";
+import ManageCMS from "./pages/ManageCMS";
+import ManageEmailTemplates from "./pages/ManageEmailTemplates";
+import EmailTemplateEdit from "./pages/EmailTemplateEdit";
+import EditProfile from "./pages/EditProfile";
 
 // Initialize data
 import { getInitialData } from "./data/initialData";
@@ -57,12 +61,16 @@ const App = () => {
                 <Route path="dispensaries" element={<Dispensaries />} />
                 <Route path="dispensaries/add" element={<DispensaryAdd />} />
                 <Route path="dispensaries/edit/:id" element={<DispensaryEdit />} />
-                <Route path="dispensaries/view/:id" element={<DispensaryView />} />
+                <Route path="dispensaries/view/:id" element={<DispensaryView />} />                
                 <Route path="service-requests" element={<ServiceRequests />} />
-                <Route path="invoices" element={<Invoices />} />
+                <Route path="service-requests/edit/:id" element={<ServiceRequestEdit />} />                
                 <Route path="knowledge-base" element={<KnowledgeBase />} />
                 <Route path="knowledge-base/add" element={<KnowledgeBaseAdd />} />
                 <Route path="knowledge-base/edit/:id" element={<KnowledgeBaseEdit />} />
+                <Route path="manage-cms" element={<ManageCMS />} />
+                <Route path="email-templates" element={<ManageEmailTemplates />} />
+                <Route path="email-templates/edit/:id" element={<EmailTemplateEdit />} />
+                <Route path="edit-profile" element={<EditProfile />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -9,6 +10,8 @@ import {
   ChevronDown,
   ChevronRight,
   BookOpen,
+  Settings,
+  Mail,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import logo from "../images/Onlylogo.png";
@@ -66,7 +69,7 @@ const NestedMenuItem: React.FC<NestedMenuItemProps> = ({
   const location = useLocation();
   // Filter subItems based on permissions
   const allowedSubItems = subItems.filter(
-    (item) => !item.permission || hasPermission(item.permission as any)
+    (item) => !item.permission || hasPermission(item.permission)
   );
 
   if (allowedSubItems.length === 0) return null;
@@ -153,7 +156,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded }) => {
 
       <div className="overflow-y-auto flex-grow scrollbar-hide">
         <nav className="mt-4 space-y-1 px-2">
-          {hasPermission("users.read" as any) && (
+          {hasPermission("users.read") && (
             <MenuItem
               to="/dashboard"
               icon={<LayoutDashboard className="h-5 w-5" />}
@@ -162,8 +165,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded }) => {
             />
           )}
 
-          {(hasPermission("users.read" as any) ||
-            hasPermission("roles.read" as any)) && (
+          {(hasPermission("users.read") ||
+            hasPermission("roles.read")) && (
             <NestedMenuItem
               to="/users"
               icon={<Users className="h-5 w-5" />}
@@ -183,7 +186,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded }) => {
               ]}
             />
           )}
-          {hasPermission("dispensaries.read" as any) && (
+          {hasPermission("dispensaries.read") && (
             <MenuItem
               to="/knowledge-base"
               icon={<BookOpen className="h-5 w-5" />}
@@ -191,7 +194,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded }) => {
               isSidebarExpanded={isExpanded}
             />
           )}
-          {hasPermission("dispensaries.read" as any) && (
+          {hasPermission("dispensaries.read") && (
             <MenuItem
               to="/dispensaries"
               icon={<Store className="h-5 w-5" />}
@@ -200,7 +203,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded }) => {
             />
           )}
 
-          {hasPermission("serviceRequests.read" as any) && (
+          {hasPermission("serviceRequests.read") && (
             <MenuItem
               to="/service-requests"
               icon={<TicketCheck className="h-5 w-5" />}
@@ -209,14 +212,23 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded }) => {
             />
           )}
 
-          {/* {hasPermission('invoices.read' as any) && (
+          {hasPermission("dispensaries.read") && (
             <MenuItem
-              to="/invoices"
+              to="/manage-cms"
               icon={<FileText className="h-5 w-5" />}
-              label="Invoices"
+              label="Manage CMS"
               isSidebarExpanded={isExpanded}
             />
-          )} */}
+          )}
+
+          {hasPermission("dispensaries.read") && (
+            <MenuItem
+              to="/email-templates"
+              icon={<Mail className="h-5 w-5" />}
+              label="Email Templates"
+              isSidebarExpanded={isExpanded}
+            />
+          )}
         </nav>
       </div>
     </aside>
