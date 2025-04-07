@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +12,7 @@ import {
   Eye,
   ArrowUp,
   ArrowDown,
+  MessageCircle,
 } from "lucide-react";
 import {
   Table,
@@ -286,6 +288,10 @@ const Dispensaries: React.FC = () => {
     navigate(`/dispensaries/view/${dispensary.id}`);
   };
 
+  const handleChatWithDispensary = (dispensary: Dispensary) => {
+    navigate(`/chat/${dispensary.id}`);
+  };
+
   const handleDeleteDispensary = (dispensary: Dispensary) => {
     const updatedDispensaries = dispensaries.filter(
       (d) => d.id !== dispensary.id
@@ -330,7 +336,7 @@ const Dispensaries: React.FC = () => {
   const resultsText = `Showing ${startItem ?? 0} to ${endItem ?? 0} of ${totalItems ?? 0} results`;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Customers
@@ -479,6 +485,14 @@ const Dispensaries: React.FC = () => {
                           >
                             <Edit className="h-4 w-4" />
                             <span className="sr-only">Edit</span>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleChatWithDispensary(dispensary)}
+                          >
+                            <MessageCircle className="h-4 w-4" />
+                            <span className="sr-only">Chat</span>
                           </Button>
                           <Button
                             variant="ghost"

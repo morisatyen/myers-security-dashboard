@@ -13,6 +13,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import AdminUsers from "./pages/AdminUsers";
+import AdminUserAdd from "./pages/AdminUserAdd";
+import AdminUserEdit from "./pages/AdminUserEdit";
 import SupportEngineers from "./pages/SupportEngineers";
 import SupportEngineerAdd from "./pages/SupportEngineerAdd";
 import SupportEngineerEdit from "./pages/SupportEngineerEdit";
@@ -22,18 +24,20 @@ import DispensaryEdit from "./pages/DispensaryEdit";
 import DispensaryView from "./pages/DispensaryView";
 import ServiceRequests from "./pages/ServiceRequests";
 import ServiceRequestEdit from "./pages/ServiceRequestEdit";
+import ServiceRequestView from "./pages/ServiceRequestView";
 import KnowledgeBase from "./pages/KnowledgeBase";
 import KnowledgeBaseAdd from "./pages/KnowledgeBaseAdd";
 import KnowledgeBaseEdit from "./pages/KnowledgeBaseEdit";
 import ManageCMS from "./pages/ManageCMS";
+import CMSPageAdd from "./pages/CMSPageAdd";
+import CMSPageEdit from "./pages/CMSPageEdit";
 import ManageEmailTemplates from "./pages/ManageEmailTemplates";
 import EmailTemplateEdit from "./pages/EmailTemplateEdit";
 import EditProfile from "./pages/EditProfile";
+import Chat from "./pages/Chat";
 
 // Initialize data
 import { getInitialData } from "./data/initialData";
-import AdminUserAdd from "./pages/AdminUserAdd";
-import AdminUserEdit from "./pages/AdminUserEdit";
 getInitialData();
 
 const queryClient = new QueryClient();
@@ -63,14 +67,19 @@ const App = () => {
                 <Route path="dispensaries/edit/:id" element={<DispensaryEdit />} />
                 <Route path="dispensaries/view/:id" element={<DispensaryView />} />                
                 <Route path="service-requests" element={<ServiceRequests />} />
-                <Route path="service-requests/edit/:id" element={<ServiceRequestEdit />} />                
+                <Route path="service-requests/edit/:id" element={<ServiceRequestEdit />} />
+                <Route path="service-requests/view/:id" element={<ServiceRequestView />} />                
                 <Route path="knowledge-base" element={<KnowledgeBase />} />
                 <Route path="knowledge-base/add" element={<KnowledgeBaseAdd />} />
                 <Route path="knowledge-base/edit/:id" element={<KnowledgeBaseEdit />} />
                 <Route path="manage-cms" element={<ManageCMS />} />
+                <Route path="manage-cms/add" element={<CMSPageAdd />} />
+                <Route path="manage-cms/edit/:id" element={<CMSPageEdit />} />
                 <Route path="email-templates" element={<ManageEmailTemplates />} />
                 <Route path="email-templates/edit/:id" element={<EmailTemplateEdit />} />
                 <Route path="edit-profile" element={<EditProfile />} />
+                <Route path="chat" element={<Chat />} />
+                <Route path="chat/:id" element={<Chat />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
