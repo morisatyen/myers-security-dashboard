@@ -41,6 +41,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Dispensary {
   id: string;
@@ -422,7 +433,7 @@ const Dispensaries: React.FC = () => {
                     onClick={() => handleSort("createdAt")}
                   >
                     <div className="flex items-center">
-                      Created Date
+                      CreatedAt
                       {sortField === "createdAt" &&
                         (sortDirection === "asc" ? (
                           <ArrowUp className="ml-1 h-4 w-4" />
@@ -431,7 +442,7 @@ const Dispensaries: React.FC = () => {
                         ))}
                     </div>
                   </TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -470,6 +481,14 @@ const Dispensaries: React.FC = () => {
                       <TableCell>{dispensary.createdAt}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleChatWithDispensary(dispensary)}
+                          >
+                            <MessageCircle className="h-4 w-4" />
+                            <span className="sr-only">Chat</span>
+                          </Button>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -485,23 +504,48 @@ const Dispensaries: React.FC = () => {
                           >
                             <Edit className="h-4 w-4" />
                             <span className="sr-only">Edit</span>
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleChatWithDispensary(dispensary)}
-                          >
-                            <MessageCircle className="h-4 w-4" />
-                            <span className="sr-only">Chat</span>
-                          </Button>
-                          <Button
+                          </Button>                          
+                          {/* <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDeleteDispensary(dispensary)}
                           >
                             <Trash className="h-4 w-4" />
                             <span className="sr-only">Delete</span>
-                          </Button>
+                          </Button> */}
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => e.stopPropagation()}
+                                className="text-red-500 hover:text-red-700 px-2"
+                              >
+                                <Trash className="h-4 w-4 mr-1" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will permanently delete the "
+                                  {dispensary.name}" Dispensary. This action cannot be
+                                  undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteDispensary(dispensary)}
+                                  className="bg-red-500 hover:bg-red-600 text-white"
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </TableCell>
                     </TableRow>

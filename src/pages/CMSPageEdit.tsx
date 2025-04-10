@@ -48,27 +48,43 @@ With over a decade of experience in the cannabis security sector, Myers Security
 
 // Quill editor modules and formats
 const quillModules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
+  toolbar: [    
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
     ["bold", "italic", "underline", "strike"],
+    [{ color: [] }, { background: [] }],
+    [{ script: "sub" }, { script: "super" }],
     [{ list: "ordered" }, { list: "bullet" }],
     [{ indent: "-1" }, { indent: "+1" }],
-    ["link", "image"],
-    ["clean"],
+    [{ direction: "rtl" }],
+    [{ align: [] }],
+    ["link", "image", "video", "formula"],
+    ["blockquote", "code-block"],
+    ["clean"]
   ],
 };
 
 const quillFormats = [
-  "header",
+  "header", 
+  "size",
   "bold",
   "italic",
   "underline",
   "strike",
+  "color",
+  "background",
+  "script",
   "list",
   "bullet",
   "indent",
+  "direction",
+  "align",
   "link",
   "image",
+  "video",
+  "formula",
+  "code-block",
+  "blockquote",
+  "clean"
 ];
 
 const CMSPageEdit: React.FC = () => {
@@ -169,7 +185,7 @@ const CMSPageEdit: React.FC = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit CMS Page</h1>
       </div>
@@ -217,7 +233,8 @@ const CMSPageEdit: React.FC = () => {
                   onChange={setContent}
                   modules={quillModules}
                   formats={quillFormats}
-                  className="bg-white dark:bg-gray-800 h-[250px] mb-12 rounded-md"
+                  // className="bg-white dark:bg-gray-800 h-[250px] mb-12 rounded-md"
+                  className="h-[250px]"
                 />
               </div>
               {errors.content && (
