@@ -253,7 +253,7 @@ const ServiceRequests: React.FC = () => {
   };
 
   const handleViewRequest = (request: ServiceRequest) => {
-    navigate(`/service-requests/view/${request.id}`);
+    navigate(`/support-ticket/view/${request.id}`);
   };
 
   const handleDeleteRequest = (request: ServiceRequest) => {
@@ -417,7 +417,7 @@ const ServiceRequests: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Service Requests
+          Support Tickets
         </h1>
         {/* <Button onClick={handleAddRequest} className="bg-myers-yellow text-myers-darkBlue hover:bg-yellow-400">
           <Plus className="h-4 w-4 mr-2" />
@@ -568,21 +568,12 @@ const ServiceRequests: React.FC = () => {
       <Card>
         <CardHeader className="pb-2">
           <div className="flex flex-col space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <CardTitle>Service Requests List</CardTitle>
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search requests..."
-                  className="pl-8 w-full sm:w-64"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </div>
+            </div> */}
 
-            <div className="flex flex-wrap gap-2">
-              <div>
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+              <div className="flex flex-wrap gap-2">
                 <select
                   className="px-3 py-2 rounded-md border text-myers-darkBlue"
                   value={statusFilter}
@@ -593,9 +584,7 @@ const ServiceRequests: React.FC = () => {
                   <option value="in-progress">In Progress</option>
                   <option value="resolved">Resolved</option>
                 </select>
-              </div>
 
-              <div>
                 <select
                   className="px-3 py-2 rounded-md border text-myers-darkBlue"
                   value={priorityFilter}
@@ -608,6 +597,15 @@ const ServiceRequests: React.FC = () => {
                   <option value="critical">Critical</option>
                 </select>
               </div>
+              <div className="relative">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search tickets..."
+                  className="pl-8 w-full sm:w-64"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -616,7 +614,7 @@ const ServiceRequests: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Request ID</TableHead>
+                  <TableHead>Ticket No</TableHead>
                   <TableHead>Dispensary</TableHead>
                   {/* <TableHead>Description</TableHead> */}
                   <TableHead>Status</TableHead>
@@ -687,17 +685,17 @@ const ServiceRequests: React.FC = () => {
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button variant="ghost" size="icon" asChild>
-                            <Link to={`/service-requests/view/${request.id}`}>
+                            <Link to={`/support-ticket/view/${request.id}`}>
                               <Eye className="h-4 w-4" />
                               <span className="sr-only">View</span>
                             </Link>
                           </Button>
                           <Button variant="ghost" size="icon" asChild>
-                            <Link to={`/service-requests/edit/${request.id}`}>
+                            <Link to={`/support-ticket/edit/${request.id}`}>
                               <Edit className="h-4 w-4" />
                               <span className="sr-only">Edit</span>
                             </Link>
-                          </Button>                          
+                          </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button
@@ -716,8 +714,8 @@ const ServiceRequests: React.FC = () => {
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
                                   This will permanently delete the "
-                                  {request.dispensaryName}" request. This action cannot be
-                                  undone.
+                                  {request.dispensaryName}" request. This action
+                                  cannot be undone.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
@@ -741,7 +739,7 @@ const ServiceRequests: React.FC = () => {
                       colSpan={9}
                       className="text-center py-6 text-muted-foreground"
                     >
-                      No service requests found
+                      No support tickets found
                     </TableCell>
                   </TableRow>
                 )}

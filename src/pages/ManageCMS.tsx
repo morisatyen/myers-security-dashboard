@@ -69,14 +69,17 @@ const ManageCMS: React.FC = () => {
           className="bg-myers-yellow text-myers-darkBlue hover:bg-yellow-400"
         >
           <Plus className="h-4 w-4 mr-2" />
-          Add Page
+          Add CMS Page
         </Button>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>CMS Pages</CardTitle>
-        </CardHeader>
+        {/* <CardHeader>
+          
+        </CardHeader> */}
+        <div className="mb-5">
+
+        </div>
         <CardContent>
           {cmsPages.length > 0 ? (
             <Table>

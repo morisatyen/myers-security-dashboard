@@ -137,7 +137,7 @@ const ServiceRequestEdit: React.FC = () => {
       description: `Request ${serviceRequest.requestId} has been updated successfully.`,
     });
 
-    navigate("/service-requests");
+    navigate("/support-ticket");
   };
 
   if (loading) {
@@ -164,7 +164,7 @@ const ServiceRequestEdit: React.FC = () => {
                 been removed.
               </p>
               <Button asChild>
-                <Link to="/service-requests">Back to Service Requests</Link>
+                <Link to="/support-ticket">Back to Service Requests</Link>
               </Button>
             </div>
           </CardContent>
@@ -178,22 +178,22 @@ const ServiceRequestEdit: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" asChild>
-            <Link to="/service-requests">
+            <Link to="/support-ticket">
               <ArrowLeft className="h-4 w-4" />
               <span className="sr-only">Back</span>
             </Link>
           </Button>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Edit Service Request: {serviceRequest.requestId}
+            Edit Support Ticket: {serviceRequest.requestId}
           </h1>
         </div>
       </div>
 
       <Card>
-        <CardHeader>
+        {/* <CardHeader>
           <CardTitle>Service Request Details</CardTitle>
-        </CardHeader>
-        <CardContent>
+        </CardHeader> */}
+        <CardContent className="mt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -370,7 +370,7 @@ const ServiceRequestEdit: React.FC = () => {
               <Button
                 variant="outline"
                 type="button"
-                onClick={() => navigate("/service-requests")}
+                onClick={() => navigate("/support-ticket")}
               >
                 Cancel
               </Button>
