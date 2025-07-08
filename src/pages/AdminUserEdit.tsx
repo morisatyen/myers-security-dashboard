@@ -47,7 +47,7 @@ const AdminUserEdit: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("details");
-  
+
   // Setup password form
   const passwordForm = useForm<z.infer<typeof passwordSchema>>({
     resolver: zodResolver(passwordSchema),
@@ -56,7 +56,7 @@ const AdminUserEdit: React.FC = () => {
       confirmPassword: ""
     }
   });
-  
+
   useEffect(() => {
     // Fetch the engineer data from localStorage
     const storedData = localStorage.getItem('supportEngineers');
@@ -76,18 +76,18 @@ const AdminUserEdit: React.FC = () => {
     }
     setIsLoading(false);
   }, [id, navigate, toast]);
-  
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
-    
+
     const formData = new FormData(event.currentTarget);
     const firstName = formData.get('firstName') as string;
     const lastName = formData.get('lastName') as string;
     const email = formData.get('email') as string;
     const phone = formData.get('phone') as string;
     const status = formData.get('status') as 'active' | 'inactive';
-    
+
     const updatedEngineer: SupportEngineer = {
       id: engineer!.id,
       firstName,
@@ -101,54 +101,54 @@ const AdminUserEdit: React.FC = () => {
       activeRequests: engineer!.activeRequests,
       joinedDate: engineer!.joinedDate
     };
-    
+
     // Update localStorage
     updateUserInStorage(updatedEngineer);
   };
-  
+
   const handlePasswordSubmit = (values: z.infer<typeof passwordSchema>) => {
     setIsSubmitting(true);
-    
+
     if (!engineer) return;
-    
+
     const updatedEngineer: SupportEngineer = {
       ...engineer,
       password: values.newPassword
     };
-    
+
     // Update localStorage
     updateUserInStorage(updatedEngineer);
-    
+
     // Reset password form
     passwordForm.reset();
   };
-  
+
   const updateUserInStorage = (updatedEngineer: SupportEngineer) => {
     const storedData = localStorage.getItem('supportEngineers');
     if (storedData) {
       const engineers: SupportEngineer[] = JSON.parse(storedData);
       const updatedEngineers = engineers.map(e => e.id === id ? updatedEngineer : e);
       localStorage.setItem('supportEngineers', JSON.stringify(updatedEngineers));
-      
+
       // Show success message
       toast({
         title: "Admin User Updated",
         description: `${updatedEngineer.firstName} ${updatedEngineer.lastName} has been updated successfully.`
       });
-      
+
       setIsSubmitting(false);
-      
+
       // Redirect back to the list page
       setTimeout(() => {
         navigate('/users/admin-users');
       }, 1000);
     }
   };
-  
+
   const handleCancel = () => {
     navigate('/users/admin-users');
   };
-  
+
   if (isLoading) {
     return (
       <div className="p-6 flex justify-center">
@@ -156,16 +156,16 @@ const AdminUserEdit: React.FC = () => {
       </div>
     );
   }
-  
+
   if (!engineer) {
     return null;
   }
-  
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={handleCancel}
           size="icon"
         >
@@ -173,7 +173,7 @@ const AdminUserEdit: React.FC = () => {
         </Button>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Admin User</h1>
       </div>
-      
+
       <Card>
         {/* <CardHeader>
           <CardTitle>Edit Admin User</CardTitle>
@@ -184,80 +184,80 @@ const AdminUserEdit: React.FC = () => {
               <TabsTrigger value="details">User Details</TabsTrigger>
               <TabsTrigger value="password">Change Password</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="details">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="firstName" className="text-sm font-medium">First Name <span className="text-red-500">*</span></label>
-                    <Input 
-                      id="firstName" 
-                      name="firstName" 
+                    <Input
+                      id="firstName"
+                      name="firstName"
                       placeholder="Enter first name"
                       defaultValue={engineer.firstName}
-                      required 
+                      required
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label htmlFor="lastName" className="text-sm font-medium">Last Name <span className="text-red-500">*</span></label>
-                    <Input 
-                      id="lastName" 
-                      name="lastName" 
+                    <Input
+                      id="lastName"
+                      name="lastName"
                       placeholder="Enter last name"
                       defaultValue={engineer.lastName}
-                      required 
+                      required
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-sm font-medium">Email <span className="text-red-500">*</span></label>
-                    <Input 
-                      id="email" 
-                      name="email" 
+                    <Input
+                      id="email"
+                      name="email"
                       type="email"
                       placeholder="Enter email address"
                       defaultValue={engineer.email}
-                      required 
+                      required
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label htmlFor="phone" className="text-sm font-medium">Phone Number <span className="text-red-500">*</span></label>
-                    <Input 
-                      id="phone" 
-                      name="phone" 
+                    <Input
+                      id="phone"
+                      name="phone"
                       placeholder="Enter phone number"
                       defaultValue={engineer.phone}
-                      required 
+                      required
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label htmlFor="status" className="text-sm font-medium">Status <span className="text-red-500">*</span></label>
-                    <select 
-                      id="status" 
-                      name="status" 
+                    <select
+                      id="status"
+                      name="status"
                       className="w-full px-3 py-2 border rounded-md text-myers-darkBlue"
                       defaultValue={engineer.status}
                       required
                     >
                       <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>                  
+                      <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end space-x-2">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={handleCancel}
                   >
                     Cancel
                   </Button>
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     disabled={isSubmitting}
                     className="bg-myers-yellow text-myers-darkBlue hover:bg-yellow-400"
                   >
@@ -266,7 +266,7 @@ const AdminUserEdit: React.FC = () => {
                 </div>
               </form>
             </TabsContent>
-            
+
             <TabsContent value="password">
               <Form {...passwordForm}>
                 <form onSubmit={passwordForm.handleSubmit(handlePasswordSubmit)} className="space-y-6">
@@ -278,17 +278,17 @@ const AdminUserEdit: React.FC = () => {
                         <FormItem>
                           <FormLabel>New Password <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input 
-                              type="password" 
+                            <Input
+                              type="password"
                               placeholder="Enter new password"
-                              {...field} 
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={passwordForm.control}
                       name="confirmPassword"
@@ -296,10 +296,10 @@ const AdminUserEdit: React.FC = () => {
                         <FormItem>
                           <FormLabel>Confirm Password <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input 
-                              type="password" 
+                            <Input
+                              type="password"
                               placeholder="Confirm new password"
-                              {...field} 
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -307,17 +307,17 @@ const AdminUserEdit: React.FC = () => {
                       )}
                     />
                   </div>
-                  
+
                   <div className="flex justify-end space-x-2">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
+                    <Button
+                      type="button"
+                      variant="outline"
                       onClick={handleCancel}
                     >
                       Cancel
                     </Button>
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       disabled={isSubmitting}
                       className="bg-myers-yellow text-myers-darkBlue hover:bg-yellow-400"
                     >
